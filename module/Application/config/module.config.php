@@ -33,12 +33,25 @@ return [
                         'action'     => 'index',
                     ],
                 ],
+                'may_terminate' => 'true',
+                'child_routes' => [
+                    'get-user-timeline' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/get-user-timeline',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action' => 'getUserTimeline',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -55,6 +68,19 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+        'strategies' => [
+            'ViewJsonStrategy',
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            View\Helper\TimeElapsed::class => InvokableFactory::class,
+            View\Helper\Tweets::class => InvokableFactory::class,
+        ],
+        'aliases' => [
+            'timeElapsed' => View\Helper\TimeElapsed::class,
+            'tweets' => View\Helper\Tweets::class,
         ],
     ],
 ];
